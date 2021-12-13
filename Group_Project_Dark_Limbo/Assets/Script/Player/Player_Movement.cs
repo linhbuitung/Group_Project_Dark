@@ -5,13 +5,21 @@ using UnityEngine;
 public class Player_Movement : MonoBehaviour
 {
     private Rigidbody2D body;
+
+    //sideway move
     float Speed = 0;
     public float MaxSpeed = 6f;
     public float Acceleration = 7f;
     public float Deceleration = 7f;
+
+    //jump
     public float jumpVelocity = 6f;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
+
+    //check hitting ground and wall
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
@@ -23,6 +31,7 @@ public class Player_Movement : MonoBehaviour
         Fall();
     }
 
+    //sideway
     private void Move()
     {
         if ((Input.GetKey(KeyCode.D)) && (Speed < MaxSpeed))
@@ -47,6 +56,7 @@ public class Player_Movement : MonoBehaviour
         transform.position = new Vector2(transform.position.x + Speed * Time.deltaTime, transform.position.y);
     }
 
+    //jump
     private void Jump()
     {
         if (Input.GetButtonDown("Jump"))
@@ -56,6 +66,7 @@ public class Player_Movement : MonoBehaviour
         
     }
 
+    //falling down control
     private void Fall()
     {
         if (body.velocity.y < 0)
@@ -69,4 +80,5 @@ public class Player_Movement : MonoBehaviour
             Debug.Log("Low");
         }
     } 
+
 }
