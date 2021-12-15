@@ -6,11 +6,14 @@ public class Player_Movement : MonoBehaviour
 {
     private Rigidbody2D body;
 
-    //sideway move
+    //sideway run
     float Speed = 0;
     public float MaxSpeed = 6f;
     public float Acceleration = 7f;
     public float Deceleration = 7f;
+
+    //sideway walk
+    public float walkSpeed = 3f;
 
     //jump
     public float jumpVelocity = 6f;
@@ -31,10 +34,18 @@ public class Player_Movement : MonoBehaviour
         Fall();
     }
 
-    //sideway
+    //sideway move
     private void Move()
     {
-        if ((Input.GetKey(KeyCode.D)) && (Speed < MaxSpeed))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+        {
+            Speed = walkSpeed;
+        }
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A))
+        {
+            Speed = -walkSpeed;
+        }
+        else if ((Input.GetKey(KeyCode.D)) && (Speed < MaxSpeed))
         {
             Speed = Speed + Acceleration * Time.deltaTime;
         }
@@ -46,9 +57,9 @@ public class Player_Movement : MonoBehaviour
            
         else
         {
-            if (Speed > Deceleration * Time.deltaTime)
+            if (Speed > Deceleration * Time.deltaTime && !Input.GetKey(KeyCode.LeftShift))
                 Speed = Speed - (Deceleration + 1) * Time.deltaTime;
-            else if (Speed < -Deceleration * Time.deltaTime)
+            else if (Speed < -Deceleration * Time.deltaTime && !Input.GetKey(KeyCode.LeftShift))
                 Speed = Speed + (Deceleration + 1) * Time.deltaTime;
             else
                 Speed = 0;
@@ -72,12 +83,10 @@ public class Player_Movement : MonoBehaviour
         if (body.velocity.y < 0)
         {
             body.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-            Debug.Log("Normal");
         }
         else if (body.velocity.y > 0 && !Input.GetButton("Jump"))
         {
             body.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-            Debug.Log("Low");
         }
     } 
 
